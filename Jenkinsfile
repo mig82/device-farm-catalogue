@@ -47,6 +47,8 @@ node {
     stage ('Publish Catalogue to Github'){
         writeFile file: 'catalogue-table.md', text: tableText
 
+        sh "pwd"
+        sh "ls"
 
         env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
