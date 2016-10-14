@@ -44,10 +44,10 @@ node {
     echo "Done reading file"
     def tableText = jsonToMarkdownTable(deviceListFile)
     
-    stage 'Publish Catalogue to Github'
-    writeFile file: 'catalogue-table.md', text: tableText
+    stage ('Publish Catalogue to Github'){
+        writeFile file: 'catalogue-table.md', text: tableText
 
-    stage('Push changes to Github repo'){
+
         env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
         env.J_USERNAME = "Mig82"
