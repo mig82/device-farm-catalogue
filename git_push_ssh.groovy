@@ -80,6 +80,9 @@ def pushSSH(Map args) {
     if (branch == null)
         error "Error. Invalid value: git branch = ${branch}";
 
+    sh "pwd"
+    sh "ls -la"
+ 
     if(config) {
         if (username == null || email == null || creds_ids == null)
             error "Error. Invalid value set: { username = ${username}, email = ${email}, credentials = ${creds_ids} }";
