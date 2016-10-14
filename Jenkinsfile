@@ -27,7 +27,7 @@ def jsonToMarkdownTable(txt){
     return header + newline + body
 }
 
-//def catalogueFileName = 'catalogue-table.md'
+def catalogueFileName = 'catalogue-table.md'
 
 node {
     
@@ -45,13 +45,15 @@ node {
     def tableText = jsonToMarkdownTable(deviceListFile)
     
     stage ('Publish Catalogue to Github'){
-        writeFile file: 'catalogue-table.md', text: tableText
+        writeFile file: catalogueFileName, text: tableText
 
         sh "pwd"
         sh "ls"
 
-        echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
-        //env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
+        def workspace = pwd()
+        sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
+        //echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
+        env.BRANCH_NAME = "develop"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
         env.J_USERNAME = "Mig82"
         env.J_EMAIL = "miguelangelxfm@gmail.com"
