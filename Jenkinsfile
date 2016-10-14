@@ -48,7 +48,7 @@ node {
         writeFile file: catalogueFileName, text: tableText
 
         def workspace = pwd()
-        //sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
+        sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
         //echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
         env.BRANCH_NAME = "develop"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
