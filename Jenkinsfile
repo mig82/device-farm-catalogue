@@ -30,33 +30,41 @@ def jsonToMarkdownTable(txt){
 def catalogueFileName = 'catalogue-table.md'
 
 node {
+
+    stage('Checkout repo'){
+        git url: 'https://github.com/mig82/device-farm-catalogue.git', branch: "develop"
+    }
     
-    stage 'Get Device Catalogue'
-    def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
-    sh """
-        export AWS_ACCESS_KEY_ID='AKIAISRF63CQSS7GV2UQ'
-        export AWS_SECRET_ACCESS_KEY='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'
-        export AWS_DEFAULT_REGION='us-west-2'
-        ${awsHome}aws devicefarm list-devices > list-devices.json
-    """ 
-    stage 'Parse Device Catalogue'
-    def deviceListFile = readFile('list-devices.json')
-    echo "Done reading file"
-    def tableText = jsonToMarkdownTable(deviceListFile)
+    stage('Get Device Catalogue'){
+        def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
+        sh """
+            export AWS_ACCESS_KEY_ID='AKIAISRF63CQSS7GV2UQ'
+            export AWS_SECRET_ACCESS_KEY='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'
+            export AWS_DEFAULT_REGION='us-west-2'
+            ${awsHome}aws devicefarm list-devices > list-devices.json
+        """
+    } 
     
+    stage('Parse Device Catalogue'){
+        def deviceListFile = readFile('list-devices.json')
+        echo "Done reading file"
+        def tableText = jsonToMarkdownTable(deviceListFile)
+    }
+
     stage ('Publish Catalogue to Github'){
         writeFile file: catalogueFileName, text: tableText
 
-        def workspace = pwd()
-        sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
+        //def workspace = pwd()
+        //sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
         //echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
         env.BRANCH_NAME = "develop"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
         env.J_USERNAME = "Mig82"
         env.J_EMAIL = "miguelangelxfm@gmail.com"
         env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
-        def gitLib = load "${workspace}@script/git_push_ssh.groovy"
-        sh "cd ${workspace}@script"
+        //def gitLib = load "${workspace}@script/git_push_ssh.groovy"
+        def gitLib = load "git_push_ssh.groovy"
+        //sh "cd ${workspace}@script"
         gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);
 
     }
