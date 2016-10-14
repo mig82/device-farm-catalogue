@@ -27,6 +27,8 @@ def jsonToMarkdownTable(txt){
     return header + newline + body
 }
 
+def catalogueFileName = 'catalogue-table.md'
+
 node {
     
     stage 'Get Device Catalogue'
@@ -43,7 +45,7 @@ node {
     def tableText = jsonToMarkdownTable(deviceListFile)
     
     stage 'Publish Catalogue to Github'
-    writeFile file: 'catalogue-table.md', text: tableText
+    writeFile file: catalogueFileName, text: tableText
 
     stage('Push changes to Github repo'){
         env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
@@ -52,7 +54,7 @@ node {
         env.J_EMAIL = "miguelangelxfm@gmail.com"
         env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
         def gitLib = load "git_push_ssh.groovy"
-        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: "README.md");
+        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);
 
     }
 }
