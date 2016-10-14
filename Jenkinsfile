@@ -32,8 +32,8 @@ node {
     stage 'Get Device Catalogue'
     def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
     sh """
-        export AWS_ACCESS_KEY_ID='AKIAJNK3YEW6Q5I7DQWQ'
-        export AWS_SECRET_ACCESS_KEY='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'
+        export AWS_ACCESS_KEY_ID='AKIAISRF63CQSS7GV2UQ'
+        export AWS_SECRET_ACCESS_KEY='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'
         export AWS_DEFAULT_REGION='us-west-2'
         ${awsHome}aws devicefarm list-devices > list-devices.json
     """ 
