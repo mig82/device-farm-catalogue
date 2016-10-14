@@ -44,4 +44,16 @@ node {
     
     stage 'Publish Catalogue to Github'
     writeFile file: 'catalogue-table.md', text: tableText
+
+    stage('Push changes to Github repo'){
+        env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
+        env.J_GIT_CONFIG = "true"
+        env.J_USERNAME = "Mig82"
+        env.J_EMAIL = "miguelangelxfm@gmail.com"
+        env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
+        def gitLib = load "git_push_ssh.groovy"
+        ...
+        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: "README.md");
+
+    }
 }
