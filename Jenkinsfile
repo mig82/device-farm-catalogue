@@ -50,7 +50,8 @@ node {
         sh "pwd"
         sh "ls"
 
-        env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
+        echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
+        //env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
         env.J_USERNAME = "Mig82"
         env.J_EMAIL = "miguelangelxfm@gmail.com"
