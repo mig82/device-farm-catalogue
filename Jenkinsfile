@@ -45,10 +45,12 @@ node {
         """
     } 
     
+    def tableText = ""
+
     stage('Parse Device Catalogue'){
         def deviceListFile = readFile('list-devices.json')
         echo "Done reading file"
-        def tableText = jsonToMarkdownTable(deviceListFile)
+        tableText = jsonToMarkdownTable(deviceListFile)
     }
 
     stage ('Publish Catalogue to Github'){
