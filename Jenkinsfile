@@ -31,10 +31,6 @@ def catalogueFileName = 'catalogue-table.md'
 
 node {
 
-    stage('Showing Environment'){
-        printenv
-    }
-
     stage('Checkout repo'){
         git url: 'https://github.com/mig82/device-farm-catalogue.git', branch: "develop"
     }
