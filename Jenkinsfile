@@ -71,7 +71,7 @@ node {
 
         sh "git add ."
         sh "git commit -m 'Updating AWS DeviceFarm catalogue'"
-        sh "git push"
+        sh "git push --set-upstream origin develop"
 
     }
 }
