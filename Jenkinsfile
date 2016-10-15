@@ -65,9 +65,13 @@ node {
         env.J_EMAIL = "miguelangelxfm@gmail.com"
         env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
         //def gitLib = load "${workspace}@script/git_push_ssh.groovy"
-        def gitLib = load "git_push_ssh.groovy"
+        /*def gitLib = load "git_push_ssh.groovy"
         //sh "cd ${workspace}@script"
-        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);
+        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
+
+        sh "git add ."
+        sh "git commit -m 'Updating AWS DeviceFarm catalogue'"
+        sh "git push"
 
     }
 }
