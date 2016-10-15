@@ -61,7 +61,7 @@ node {
         //echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
         env.BRANCH_NAME = "develop"// BRANCH_NAME is predefined in multibranch pipeline job
         env.J_GIT_CONFIG = "true"
-        env.J_USERNAME = "Mig82"
+        env.J_USERNAME = "mig82"
         env.J_EMAIL = "miguelangelxfm@gmail.com"
         env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
         //def gitLib = load "${workspace}@script/git_push_ssh.groovy"
@@ -69,6 +69,8 @@ node {
         //sh "cd ${workspace}@script"
         gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
 
+        sh "git config user.name ${env.J_USERNAME}"
+        sh "git config user.email ${env.J_EMAIL}"
         sh "git add ."
         sh "git commit -m 'Updating AWS DeviceFarm catalogue'"
         sh "git push --set-upstream origin develop"
