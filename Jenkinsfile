@@ -69,8 +69,9 @@ node {
         //sh "cd ${workspace}@script"
         gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
 
+        //git remote set-url origin git@github.com:${env.J_USERNAME}/device-farm-catalogue.git
         sh """
-            git remote set-url origin git@github.com:${env.J_USERNAME}/device-farm-catalogue.git
+            git remote add origin https://${env.J_USERNAME}:T3quil%401@github.com/${env.J_USERNAME}/device-farm-catalogue.git  
             git config user.name ${env.J_USERNAME}
             git config user.email ${env.J_EMAIL}
             git add .
