@@ -31,6 +31,10 @@ def catalogueFileName = 'catalogue-table.md'
 
 node {
 
+    stage('Showing Environment'){
+        printenv
+    }
+
     stage('Checkout repo'){
         git url: 'https://github.com/mig82/device-farm-catalogue.git', branch: "develop"
     }
@@ -70,6 +74,7 @@ node {
         gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
 
         sh """
+            git remote set-url origin git@github.com:${env.J_USERNAME}/device-farm-catalogue.git
             git config user.name ${env.J_USERNAME}
             git config user.email ${env.J_EMAIL}
             git add .
