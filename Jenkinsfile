@@ -69,11 +69,13 @@ node {
         //sh "cd ${workspace}@script"
         gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
 
-        sh "git config user.name ${env.J_USERNAME}"
-        sh "git config user.email ${env.J_EMAIL}"
-        sh "git add ."
-        sh "git commit -m 'Updating AWS DeviceFarm catalogue'"
-        sh "git push --set-upstream origin develop"
+        sh """
+            git config user.name ${env.J_USERNAME}
+            git config user.email ${env.J_EMAIL}
+            git add .
+            git commit -m 'Updating AWS DeviceFarm catalogue'
+            git push --set-upstream origin develop 
+        """
 
     }
 }
