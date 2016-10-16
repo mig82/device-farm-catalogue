@@ -42,9 +42,10 @@ This script just makes finding those ARN's less painfull, by updating the catalo
 
 ##Implementation Notes
 
-1) The cript assumes you'll place it in a repository that's accessible to your Jenkins server.
-2) The script assumes you've made AWS credentials available by using the [Jenkins Credentials Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin)
-3) The script assumes you've generated SSH keys for the Jenkins user to access your github account.
+1. The cript assumes you'll place it in a repository that's accessible to your Jenkins server.
+2. The script assumes you've made AWS credentials available by using the [Jenkins Credentials Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin)
+3. The script assumes you've generated SSH keys for the Jenkins user to access your github account.
+
 * See [Generating Github SSH Credentials](https://help.github.com/articles/generating-an-ssh-key/)
 * The SSH keys must be generated for your Jenkins user, so remamber to *sudo su - jenkins* before you generate the keys.
 
