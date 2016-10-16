@@ -58,30 +58,8 @@ node {
     stage ('Publish Catalogue to Github'){
         writeFile file: catalogueFileName, text: tableText
 
-        //def workspace = pwd()
-        //sh "cp ${workspace}/${catalogueFileName} ${workspace}@script/${catalogueFileName}"
-        //echo "env.BRANCH_NAME is '${env.BRANCH_NAME}'"
-        
-        //env.BRANCH_NAME = "develop"// BRANCH_NAME is predefined in multibranch pipeline job
-        //env.J_GIT_CONFIG = "true"
-        //env.J_USERNAME = "mig82"
-        //env.J_EMAIL = "miguelangelxfm@gmail.com"
-        //env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
-        
-        //def gitLib = load "${workspace}@script/git_push_ssh.groovy"
-        /*def gitLib = load "git_push_ssh.groovy"
-        //sh "cd ${workspace}@script"
-        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: catalogueFileName);*/
-
-        //git remote set-url origin git@github.com:${env.J_USERNAME}/device-farm-catalogue.git
-        /*sh """
-            git remote add origin https://${env.J_USERNAME}:T3quil%401@github.com/${env.J_USERNAME}/device-farm-catalogue.git  
-            git config user.name ${env.J_USERNAME}
-            git config user.email ${env.J_EMAIL}
-            git add .
-            git commit -m 'Updating AWS DeviceFarm catalogue'
-            git push --set-upstream origin develop 
-        """*/
+        //Using ssh keys doesn't require credentials.
+        //TODO: Move to use credentials through Jenkins Credentials Plugin.
         //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'miguelangelxfm-github-com', passwordVariable: 'GITHUB_PASSWD', usernameVariable: 'GITHUB_USER']]) {
             sh """
                 git add .
