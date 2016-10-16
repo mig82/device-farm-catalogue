@@ -27,34 +27,45 @@ def jsonToMarkdownTable(txt){
     return header + newline + body
 }
 
-//def catalogueFileName = 'catalogue-table.md'
+def catalogueFileName = 'catalogue-table.md'
 
 node {
+
+    stage('Checkout repo'){
+        //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
+        git url: 'git@github.com:mig82/device-farm-catalogue.git', branch: "develop"
+    }
     
-    stage 'Get Device Catalogue'
-    def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
-    sh """
-        export AWS_ACCESS_KEY_ID='AKIAISRF63CQSS7GV2UQ'
-        export AWS_SECRET_ACCESS_KEY='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'
-        export AWS_DEFAULT_REGION='us-west-2'
-        ${awsHome}aws devicefarm list-devices > list-devices.json
-    """ 
-    stage 'Parse Device Catalogue'
-    def deviceListFile = readFile('list-devices.json')
-    echo "Done reading file"
-    def tableText = jsonToMarkdownTable(deviceListFile)
+    stage('Get Device Catalogue'){
+        //Get the path to the local installation of aws.
+        def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'devicefarm-readonly', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            sh """
+                export AWS_DEFAULT_REGION='us-west-2'
+                ${awsHome}aws devicefarm list-devices > list-devices.json
+            """
+        }
+    } 
     
+    def tableText = ""
+
+    stage('Parse Device Catalogue'){
+        def deviceListFile = readFile('list-devices.json')
+        echo "Done reading file"
+        tableText = jsonToMarkdownTable(deviceListFile)
+    }
+
     stage ('Publish Catalogue to Github'){
-        writeFile file: 'catalogue-table.md', text: tableText
+        writeFile file: catalogueFileName, text: tableText
 
-
-        env.BRANCH_NAME = "master"// BRANCH_NAME is predefined in multibranch pipeline job
-        env.J_GIT_CONFIG = "true"
-        env.J_USERNAME = "Mig82"
-        env.J_EMAIL = "miguelangelxfm@gmail.com"
-        env.J_CREDS_IDS = 'myGithubCredentials' // Use credentials id from Jenkins
-        def gitLib = load "git_push_ssh.groovy"
-        gitLib.pushSSH(commitMsg: "Jenkins build #${env.BUILD_NUMBER}", tagName: "build-${env.BUILD_NUMBER}", files: "catalogue-table.md");
-
+        //Using ssh keys doesn't require credentials.
+        //TODO: Move to use credentials through Jenkins Credentials Plugin.
+        //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'miguelangelxfm-github-com', passwordVariable: 'GITHUB_PASSWD', usernameVariable: 'GITHUB_USER']]) {
+            sh """
+                git add .
+                git commit -m 'Updating AWS DeviceFarm catalogue'
+                git push --set-upstream origin develop 
+            """
+        //}
     }
 }
