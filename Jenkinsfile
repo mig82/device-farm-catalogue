@@ -32,7 +32,8 @@ def catalogueFileName = 'catalogue-table.md'
 node {
 
     stage('Checkout repo'){
-        git url: 'https://github.com/mig82/device-farm-catalogue.git', branch: "develop"
+        //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
+        git url: 'git@github.com:mig82/device-farm-catalogue.git', branch: "develop"
     }
     
     stage('Get Device Catalogue'){
@@ -81,12 +82,12 @@ node {
             git commit -m 'Updating AWS DeviceFarm catalogue'
             git push --set-upstream origin develop 
         """*/
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'miguelangelxfm-github-com', passwordVariable: 'GITHUB_PASSWD', usernameVariable: 'GITHUB_USER']]) {
+        //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'miguelangelxfm-github-com', passwordVariable: 'GITHUB_PASSWD', usernameVariable: 'GITHUB_USER']]) {
             sh """
                 git add .
                 git commit -m 'Updating AWS DeviceFarm catalogue'
                 git push --set-upstream origin develop 
             """
-        }
+        //}
     }
 }
