@@ -36,13 +36,14 @@ node {
     }
     
     stage('Get Device Catalogue'){
+        //Get the path to the local installation of aws.
         def awsHome = '/Library/Frameworks/Python.framework/Versions/3.5/bin/'
-        sh """
-            export AWS_ACCESS_KEY_ID='AKIAISRF63CQSS7GV2UQ'
-            export AWS_SECRET_ACCESS_KEY='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'
-            export AWS_DEFAULT_REGION='us-west-2'
-            ${awsHome}aws devicefarm list-devices > list-devices.json
-        """
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'devicefarm-readonly', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            sh """
+                export AWS_DEFAULT_REGION='us-west-2'
+                ${awsHome}aws devicefarm list-devices > list-devices.json
+            """
+        }
     } 
     
     def tableText = ""
