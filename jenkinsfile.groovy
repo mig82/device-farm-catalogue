@@ -33,8 +33,9 @@ node {
 
     stage('Parse Device Catalogue'){
         def deviceListFile = readFile('list-devices.json')
-        echo "Done reading file"
+        echo "Done reading list-devices.json file"
         def json2Md = load "json-to-markdown.groovy"
+        echo "Done loading json-to-markdown.groovy script"
         tableText = json2Md.jsonToMarkdownTable(deviceListFile)
     }
 
