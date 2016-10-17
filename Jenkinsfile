@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 def jsonToMarkdownTable(txt){
     
     //Parse the text into JSON, get the devices property and sort by name.
-    def devices = new groovy.json.JsonSlurper().parseText(txt).devices.toSorted { a, b -> a.name <=> b.name }
+    def devices = new JsonSlurper().parseText(txt).devices.toSorted { a, b -> a.name <=> b.name }
     
     //This is for adding new lines.
     def newline = "\n"
