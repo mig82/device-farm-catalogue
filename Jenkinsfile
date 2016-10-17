@@ -9,8 +9,6 @@ def catalogueRepoUrl = 'https://github.com/mig82/' + gitProject + '.git'
 
 node {
 
-    def json2Md = load "json-to-markdown.groovy"
-    
     /*stage('Checkout repo'){
         //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
         git url: catalogueRepoUrl, branch: gitProjectBranch
@@ -36,6 +34,7 @@ node {
     stage('Parse Device Catalogue'){
         def deviceListFile = readFile('list-devices.json')
         echo "Done reading file"
+        def json2Md = load "json-to-markdown.groovy"
         tableText = json2Md.jsonToMarkdownTable(deviceListFile)
     }
 
