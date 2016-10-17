@@ -49,6 +49,11 @@ node {
             String encodedPassword = URLEncoder.encode(GIT_PASSWORD)
 
             sh "pwd"
+            echo "${env.J_CREDS_IDS}"
+            echo "${env.J_EMAIL}"
+            echo "${env.J_USERNAME}"
+            echo "${env.J_GIT_CONFIG}"
+            echo "${env.BRANCH_NAME}"
 
             sh """
                 git status
