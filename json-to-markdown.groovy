@@ -26,3 +26,5 @@ def jsonToMarkdownTable(txt){
     
     return header + newline + body
 }
+
+return this;
