@@ -70,7 +70,7 @@ node {
         //TODO: Move to use credentials through Jenkins Credentials Plugin.
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
             
-            String encodedPassword = GIT_PASSWORD.bytes.encodeBase64().toString()
+            String encodedPassword = URLEncoder.encode(GIT_PASSWORD)
 
             sh """
                 git add .
