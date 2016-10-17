@@ -18,6 +18,7 @@ node {
         sh """
             git config user.email 'miguelangelxfm@gmail.com'
             git config user.name 'mig82'
+            git config push.default simple
         """
     }
     
