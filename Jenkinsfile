@@ -72,7 +72,7 @@ node {
             sh """
                 git add .
                 git commit -m 'Updating AWS DeviceFarm catalogue'
-                push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${gitProject}.git 
+                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${gitProject}.git 
             """
         }
     }
