@@ -15,6 +15,10 @@ node {
 
     stage('Checkout repo'){
         git branch: gitProjectBranch, credentialsId: gitHubCredentialsId, url: catalogueRepoUrl, changelog: false, poll: false
+        sh """
+            git config user.email 'miguelangelxfm@gmail.com'
+            git config user.name 'mig82'
+        """
     }
     
     stage('Get Device Catalogue'){
