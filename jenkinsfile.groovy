@@ -45,6 +45,7 @@ node {
         //TODO: Move to use credentials through Jenkins Credentials Plugin.
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
             
+            String encodedUser = URLEncoder.encode(GIT_USERNAME)
             String encodedPassword = URLEncoder.encode(GIT_PASSWORD)
 
             sh """
