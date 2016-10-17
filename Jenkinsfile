@@ -69,10 +69,13 @@ node {
         //Using ssh keys doesn't require credentials.
         //TODO: Move to use credentials through Jenkins Credentials Plugin.
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+            
+            String encodedPassword = GIT_PASSWORD.bytes.encodeBase64().toString()
+
             sh """
                 git add .
                 git commit -m 'Updating AWS DeviceFarm catalogue'
-                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${gitProject}.git 
+                git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/${gitProject}.git 
             """
         }
     }
