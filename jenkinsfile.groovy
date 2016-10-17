@@ -14,12 +14,17 @@ node {
     }*/
 
     stage('Checkout repo'){
-        git branch: gitProjectBranch, credentialsId: gitHubCredentialsId, url: catalogueRepoUrl, changelog: false, poll: false
-        sh """
-            git config user.email 'miguelangelxfm@gmail.com'
-            git config user.name 'mig82'
-            git config push.default simple
-        """
+
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+        
+            git branch: gitProjectBranch, credentialsId: gitHubCredentialsId, url: catalogueRepoUrl, changelog: false, poll: false
+            
+            //git config user.email 'miguelangelxfm@gmail.com'
+            sh """
+                git config user.name ${GIT_USERNAME}
+                git config push.default simple
+            """
+        }
     }
     
     stage('Get Device Catalogue'){
@@ -54,11 +59,6 @@ node {
             String encodedPassword = URLEncoder.encode(GIT_PASSWORD)
 
             sh "pwd"
-            echo "${env.J_CREDS_IDS}"
-            echo "${env.J_EMAIL}"
-            echo "${env.J_USERNAME}"
-            echo "${env.J_GIT_CONFIG}"
-            echo "${env.BRANCH_NAME}"
 
             sh """
                 git status
