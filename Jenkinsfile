@@ -28,12 +28,20 @@ def jsonToMarkdownTable(txt){
 }
 
 def catalogueFileName = 'catalogue-table.md'
+def gitHubCredentialsId = 'miguelangelxfm-github-com'
+def gitProject = 'device-farm-catalogue'
+//def catalogueRepoUrl = 'git@github.com:mig82/device-farm-catalogue.git'
+def catalogueRepoUrl = 'https://github.com/mig82/${gitProject}.git'
 
 node {
 
-    stage('Checkout repo'){
+    /*stage('Checkout repo'){
         //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
-        git url: 'git@github.com:mig82/device-farm-catalogue.git', branch: "develop"
+        git url: catalogueRepoUrl, branch: "develop"
+    }*/
+
+    stage('Checkout repo'){
+        git branch: 'develop', credentialsId: gitHubCredentialsId, url: catalogueRepoUrl, changelog: false, poll: false
     }
     
     stage('Get Device Catalogue'){
@@ -60,12 +68,12 @@ node {
 
         //Using ssh keys doesn't require credentials.
         //TODO: Move to use credentials through Jenkins Credentials Plugin.
-        //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'miguelangelxfm-github-com', passwordVariable: 'GITHUB_PASSWD', usernameVariable: 'GITHUB_USER']]) {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
             sh """
                 git add .
                 git commit -m 'Updating AWS DeviceFarm catalogue'
-                git push --set-upstream origin develop 
+                push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${gitProject}.git 
             """
-        //}
+        }
     }
 }
