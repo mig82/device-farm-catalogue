@@ -7,10 +7,10 @@ def gitProjectBranch = 'develop'
 //def catalogueRepoUrl = 'git@github.com:mig82/device-farm-catalogue.git'
 def catalogueRepoUrl = 'https://github.com/mig82/' + gitProject + '.git'
 
-def json2Md = load "json-to-markdown.groovy"
-
 node {
 
+    def json2Md = load "json-to-markdown.groovy"
+    
     /*stage('Checkout repo'){
         //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
         git url: catalogueRepoUrl, branch: gitProjectBranch
