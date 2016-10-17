@@ -1,13 +1,12 @@
 
-
-def catalogueFileName = 'catalogue-table.md'
-def gitHubCredentialsId = 'miguelangelxfm-github-com'
-def gitProject = 'device-farm-catalogue'
-def gitProjectBranch = 'develop'
-//def catalogueRepoUrl = 'git@github.com:mig82/device-farm-catalogue.git'
-def catalogueRepoUrl = 'https://github.com/mig82/' + gitProject + '.git'
-
 node {
+
+    def catalogueFileName = 'catalogue-table.md'
+    def gitHubCredentialsId = 'miguelangelxfm-github-com'
+    def gitProject = 'device-farm-catalogue'
+    def gitProjectBranch = 'develop'
+    //def catalogueRepoUrl = 'git@github.com:mig82/device-farm-catalogue.git'
+    def catalogueRepoUrl = 'https://github.com/mig82/' + gitProject + '.git'
 
     /*stage('Checkout repo'){
         //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
