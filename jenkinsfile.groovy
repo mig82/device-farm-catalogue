@@ -55,8 +55,7 @@ node {
         //TODO: Move to use credentials through Jenkins Credentials Plugin.
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitHubCredentialsId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
             
-            GIT_USERNAME = URLEncoder.encode(GIT_USERNAME)
-            GIT_PASSWORD = URLEncoder.encode(GIT_PASSWORD)
+            String password = GIT_PASSWORD.contains("@") ? URLEncoder.encode(GIT_PASSWORD) : GIT_PASSWORD
 
             sh "pwd"
 
@@ -64,7 +63,7 @@ node {
                 git status
                 git add .
                 git commit -m 'Updating AWS DeviceFarm catalogue'
-                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${gitProject}.git 
+                git push https://${GIT_USERNAME}:${password}@github.com/${GIT_USERNAME}/${gitProject}.git 
             """
         }
     }
