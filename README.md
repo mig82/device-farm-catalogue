@@ -1,10 +1,10 @@
-#AWS Device Farm Catalogue
+# AWS Device Farm Catalogue
 
 This project is a Jenkins Pipeline script that lists the available devices in AWS DeviceFarm and creates a catalogue listing their most important characteristics and their ARN's. The idea is to make it easy for testers to find the ARN's of the devices they want to test on when using AWS DeviceFarm.
 
 [The resulting catalogue can be found here](./catalogue-table.md)
 
-##Context
+## Context
 
 In order to run tests on AWS Device Farm, tester must first create *Device Pools*. If the tester has access to the AWS Console that seems easy enough. However in an environment where testers do not have that kind of access and/or if there's a need to automate the creation of the device pools, then using the AWS CLI command line utility is the alternative.
 
@@ -40,7 +40,7 @@ The AWS Device Farm CLI command line utility does include a [list-devices servic
 
 This script just makes finding those ARN's less painfull, by updating the catalogue periodically and listing it in alphabetical order by the device's name.
 
-##Implementation Notes
+## Implementation Notes
 
 1. The cript assumes you'll place it in a repository that's accessible to your Jenkins server.
 2. The script assumes you've made AWS credentials available by using the [Jenkins Credentials Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin)
@@ -49,9 +49,3 @@ This script just makes finding those ARN's less painfull, by updating the catalo
 
 * See [Generating Github SSH Credentials](https://help.github.com/articles/generating-an-ssh-key/)
 * The SSH keys must be generated for your Jenkins user, so remamber to *sudo su - jenkins* before you generate the keys.
-
-
-
-
-
-
