@@ -60,7 +60,8 @@ node {
     def gitBranch = params.BRANCH //'master' //String parameter
     def catalogueFileName = 'catalogue-table.md'
 
-    stage('Validate input parameters'){
+
+    stage('Parse git URL'){
         echo catalogueRepoUrl
         def gitParams = catalogueRepoUrl.split('/')
         
@@ -97,27 +98,13 @@ node {
 
     stage('Checkout repo'){
 
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: gitCredId, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-        
-            //Can't use git branch step because it attempts to use git.exe from master instead of git installed on linux slave.
-            //git branch: gitProjectBranch, credentialsId: gitHubCredentialsId, url: catalogueRepoUrl, changelog: false, poll: false
-            sh """
-                git clone ${gitProtocol}//${GIT_USERNAME}:${GIT_PASSWORD}@${gitDomain}/${orgName}/${gitProject}.git
-                echo 'Done cloning'
-                cd ${gitProject}
-                git checkout ${gitBranch}
-                git config user.name ${GIT_USERNAME}
-                git config push.default simple
-                git config -l
-                ls -la
-            """
-
-            //def catalogueRepoUrl = 'git@engie-src.ci.konycloud.com:Corporate-Reusables/device-farm-catalogue.git'
-            //TODO: Use SSH or HTTPS based on input parameters.
-            /*stage('Checkout repo'){
-                //Use the SSH url to clone and then be able to push just with the SSH key, rather than with user and password.
-                git url: (gitProtocol + catalogueRepoUrl), branch: gitProjectBranch
-            }*/
+        dir(gitProject){
+            git(
+                credentialsId: gitCredId,
+                poll: false,
+                url: catalogueRepoUrl,
+                branch: gitBranch
+            )
         }
     }
     
