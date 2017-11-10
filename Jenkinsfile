@@ -55,9 +55,9 @@ node {
     def awsHome = '' // If AWS CLI is already in the path.
     
     def gitProtocol, gitDomain, orgName, gitProject
-    def gitCredId = GIT_CREDENTIALS //Credentials parameter
-    def catalogueRepoUrl = CATALOGUE_REPO_URL //String parameter
-    def gitBranch = BRANCH //'master' //String parameter
+    def gitCredId =  params.GIT_CREDENTIALS //Credentials parameter
+    def catalogueRepoUrl = params.CATALOGUE_REPO_URL //String parameter
+    def gitBranch = params.BRANCH //'master' //String parameter
     def catalogueFileName = 'catalogue-table.md'
 
     stage('Validate input parameters'){
