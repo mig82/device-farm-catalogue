@@ -110,20 +110,25 @@ node {
     
     stage('Get Device Catalogue'){
 
-        /*withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: AWS_CREDENTIALS, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh """
-                export AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}'
-                export AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}'
-            """
-        }*/
+        withCredentials([[
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: params.AWS_CREDENTIALS,
+            usernameVariable: 'AWS_ACCESS_KEY_ID',
+            passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
 
-        sh ("""
-            cd ${gitProject}
-            pwd
-            ${awsHome}aws --region 'us-west-2' devicefarm list-devices > list-devices.json
-            echo 'done listing devices'
-            ls -la
-        """)
+            withEnv([
+                    "AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}",
+                    "AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}"]) {
+                sh ("""
+                    cd ${gitProject}
+                    pwd
+                    ${awsHome}aws --region 'us-west-2' devicefarm list-devices > list-devices.json
+                    echo 'done listing devices'
+                    ls -la
+                """)
+            }
+        }
     }
 
     def tableText = ""
