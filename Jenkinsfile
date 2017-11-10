@@ -1,3 +1,52 @@
+properties([
+    [
+        $class: 'BuildDiscarderProperty',
+        strategy: [
+            $class: 'LogRotator',
+            artifactDaysToKeepStr: '',
+            artifactNumToKeepStr: env.MAX_ARTIFACTS_TO_KEEP?:'10',
+            daysToKeepStr: '',
+            numToKeepStr: env.MAX_JOBS_TO_KEEP?:'10'
+        ]
+    ],
+    parameters([
+        string(
+            name: 'CATALOGUE_REPO_URL',
+            defaultValue: params.CATALOGUE_REPO_URL?:'',
+            description: 'The Git URL of the repository where you want to publish the device catalogue.'
+        ),
+        string(
+            name: 'BRANCH',
+            defaultValue: params.BRANCH?:'',
+            description: 'The branch of the Git repo where you want to publish the device catalogue.'
+        ),
+        [
+            $class: 'CredentialsParameterDefinition',
+            name: 'GIT_CREDENTIALS',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
+            defaultValue: params.GIT_CREDENTIALS?:'',
+            description: '',
+            required: true
+        ],
+        [
+            $class: 'CredentialsParameterDefinition',
+            name: 'AWS_CREDENTIALS',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
+            defaultValue: params.AWS_CREDENTIALS?:'',
+            description: 'The AWS key and secret you\'ll use to query the devices from DeviceFarm',
+            required: true
+        ]
+    ])
+])
+
+def abort = false
+if(currentBuild.number == 1 || params == null){
+    currentBuild.result = 'SUCCESS'
+    currentBuild.description = "'Configuration run'"
+    echo("Is this the first build? The input parameters should be defined now. Please try again.")
+    abort = true
+}
+if(abort)return;//This breaks the execution of the build.
 
 node {
 
